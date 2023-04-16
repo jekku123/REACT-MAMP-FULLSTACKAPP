@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 const ListUser = () => {
   const [users, setUsers] = useState([]);
@@ -11,6 +12,11 @@ const ListUser = () => {
   const getUsers = async () => {
     const response = await axios.get('http://localhost:8005/api/');
     setUsers(response.data);
+  };
+
+  const deleteUser = async (id) => {
+    await axios.delete(`http://localhost:8005/api/index.php/user/${id}/delete`);
+    getUsers();
   };
 
   return (
@@ -33,6 +39,12 @@ const ListUser = () => {
                 <td>{user.username}</td>
                 <td>{user.email}</td>
                 <td>{user.mobile}</td>
+                <td>
+                  <Link to={`user/${user.id}/edit`}>Edit</Link>
+                </td>
+                <td>
+                  <button onClick={() => deleteUser(user.id)}>Delete</button>
+                </td>
               </tr>
             ))}
           </tbody>
